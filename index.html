@@ -587,24 +587,42 @@
       #mobileNav.open{ display: block; }
     }
 
-    .thumb img{
-      width:100%;
-      height:100%;
-      object-fit: cover;
-      display:block;
+    /* Ensure media fits nicely inside cards */
+    .thumb, .mediaBox{
+      position: relative;
+      overflow: hidden;
     }
 
-    .thumb video{
-      width:100%;
-      height:100%;
+    /* Make images/videos/iframes fill the containers */
+    .thumb img, .thumb video,
+    .mediaBox img, .mediaBox video,
+    .mediaBox iframe{
+      width: 100%;
+      height: 100%;
+      display: block;
       object-fit: cover;
     }
 
-    .mediaBox img,
+    /* Optional: remove video black bars on some browsers */
     .mediaBox video{
-      width:100%;
-      height:100%;
-      object-fit: cover;
+      background: #000;
+    }
+
+    /* Optional: professional hover zoom on project thumbnails */
+    .projectCard .thumb img,
+    .projectCard .thumb video{
+      transform: scale(1.02);
+      transition: transform .35s ease;
+    }
+    .projectCard:hover .thumb img,
+    .projectCard:hover .thumb video{
+      transform: scale(1.08);
+    }
+
+    .mediaBox iframe{
+      width: 100%;
+      height: 100%;
+      border: 0;
       border-radius: 18px;
     }
   </style>
@@ -849,14 +867,15 @@
 
     <div class="card pad">
       <div class="projects">
-        <!-- PROJECT CARD TEMPLATE -->
+        <!-- PROJECT CARD 1 (IMAGE) -->
         <article class="projectCard">
-          <!-- EDIT HERE: Replace thumbnail with an image/video if you want -->
           <div class="thumb">
+            <!-- EDIT HERE: project image -->
             <img src="img/projects/JVL.png" alt="Project 1">
           </div>
+
           <div class="projectBody">
-            <h3 data-i18n="p1_title">Project Title #1</h3>
+            <h3 data-i18n="p1_title">Jeu de Vitesse Lumineux</h3>
             <p data-i18n="p1_desc">
               Short description: what problem it solves, what you built, and the result.
             </p>
@@ -866,10 +885,15 @@
           </div>
         </article>
 
+        <!-- PROJECT CARD 2 (VIDEO PREVIEW) -->
         <article class="projectCard">
-          <div class="thumb">IMAGE / VIDEO</div>
+          <div class="thumb">
+            <!-- EDIT HERE: project video (remove controls if you want it cleaner) -->
+            <img src="img/projects/sumobix.png" alt="Project 2">
+          </div>
+
           <div class="projectBody">
-            <h3 data-i18n="p2_title">Project Title #2</h3>
+            <h3 data-i18n="p2_title">Robô-Sumo</h3>
             <p data-i18n="p2_desc">Add screenshots, links, and technologies used.</p>
             <div class="tags">
               <span class="tag">Hardware</span><span class="tag">PCB</span><span class="tag">SMD</span>
@@ -877,8 +901,13 @@
           </div>
         </article>
 
+        <!-- PROJECT CARD 3 (IMAGE) -->
         <article class="projectCard">
-          <div class="thumb">IMAGE / VIDEO</div>
+          <div class="thumb">
+            <!-- EDIT HERE: another image -->
+            <img src="img/projects/project3.jpg" alt="Project 3">
+          </div>
+
           <div class="projectBody">
             <h3 data-i18n="p3_title">Project Title #3</h3>
             <p data-i18n="p3_desc">This area is ready for your portfolio content.</p>
@@ -887,6 +916,7 @@
             </div>
           </div>
         </article>
+
       </div>
     </div>
   </div>
@@ -908,29 +938,30 @@
 
     <div class="card pad">
       <div class="mediaGrid">
-        <!-- EDIT HERE: Replace these placeholders with real images/videos -->
+
+        <!-- LARGE: VIDEO (your current one) -->
         <div class="mediaBox large">
-          <video src="video/JVL.mp4" autoplay muted loop controls></video>
+          <video src="video/JVL.mp4" autoplay muted loop playsinline controls></video>
         </div>
 
+        <!-- SMALL: IMAGE (replace placeholder text with an image) -->
         <div class="mediaBox small">
-          <div>
-            <div style="font-weight:900; margin-bottom:6px;" data-i18n="media_box2_title">Gallery Item</div>
-            <div style="color: var(--muted); font-weight:700;" data-i18n="media_box2_desc">
-              Add a photo, certificate, or screenshot.
-            </div>
-          </div>
+          <video src="video/sumobix.mp4" autoplay muted loop playsinline controls></video>
         </div>
 
+        <!-- SMALL: YOUTUBE EMBED (replace VIDEO_ID) -->
         <div class="mediaBox small">
-          <div>
-            <div style="font-weight:900; margin-bottom:6px;" data-i18n="media_box3_title">Gallery Item</div>
-            <div style="color: var(--muted); font-weight:700;" data-i18n="media_box3_desc">
-              Add another media item here.
-            </div>
-          </div>
+          <iframe
+            src="https://www.youtube.com//embed/x8Fl97D0mi4"
+            title="YouTube video player"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
         </div>
 
+        <!-- LARGE: POSTS / NOTES (keep your text block) -->
         <div class="mediaBox large">
           <div>
             <div style="font-weight:900; margin-bottom:6px;" data-i18n="media_box4_title">Posts / Notes</div>
@@ -939,9 +970,9 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
-
   </div>
 </section>
 
@@ -1049,9 +1080,9 @@
 
       projects_title: "Projects",
       projects_desc: "Add your projects here. Each card has a placeholder thumbnail and space for a summary and tags.",
-      p1_title: "Project Title #1",
+      p1_title: "Light Speed Game.",
       p1_desc: "Short description: what problem it solves, what you built, and the result.",
-      p2_title: "Project Title #2",
+      p2_title: "Sumo-Robot",
       p2_desc: "Add screenshots, links, and technologies used.",
       p3_title: "Project Title #3",
       p3_desc: "This area is ready for your portfolio content.",
@@ -1125,9 +1156,9 @@
 
       projects_title: "Projets",
       projects_desc: "Ajoutez vos projets ici. Chaque carte a une vignette et un espace pour le résumé + tags.",
-      p1_title: "Projet #1",
+      p1_title: "Jeu de Vitesse Lumineux",
       p1_desc: "Description courte : le problème, ce que vous avez construit, et le résultat.",
-      p2_title: "Projet #2",
+      p2_title: "Robot-Sumo",
       p2_desc: "Ajoutez captures, liens et technologies utilisées.",
       p3_title: "Projet #3",
       p3_desc: "Zone prête pour votre contenu.",
@@ -1201,9 +1232,9 @@
 
       projects_title: "Projetos",
       projects_desc: "Adicione seus projetos aqui. Cada card tem miniatura e espaço para resumo + tags.",
-      p1_title: "Projeto #1",
+      p1_title: "Jogo de Luz e Velocidade",
       p1_desc: "Descrição curta: problema, o que você construiu e o resultado.",
-      p2_title: "Projeto #2",
+      p2_title: "Robô-Sumo",
       p2_desc: "Adicione prints, links e tecnologias usadas.",
       p3_title: "Projeto #3",
       p3_desc: "Área pronta para seu conteúdo.",
