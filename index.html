@@ -179,6 +179,13 @@
       justify-content:flex-end;
     }
 
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
     .btn{
       cursor:pointer;
       user-select:none;
@@ -278,9 +285,9 @@
     }
     .heroGrid{
       display:grid;
-      grid-template-columns: 1.05fr .95fr;
+      grid-template-columns: 1fr 1fr; /* deixa os dois lados equivalentes */
       gap: clamp(18px, 3vw, 28px);
-      align-items:center;
+      align-items: stretch; /* ESTICA para a direita ter a mesma “altura visual” */
     }
     @media (max-width: 900px){
       .heroGrid{ grid-template-columns: 1fr; }
@@ -348,15 +355,18 @@
 
     /* Right: hero image with cinematic + float */
     .stage{
-      padding: clamp(18px, 3vw, 28px);
+      padding: clamp(0px, 0vw, 0px); /* antes era bem maior */
       display:grid;
-      place-items:center;
+      place-items: stretch; /* deixa o frame ocupar o card */
       position:relative;
-      min-height: 360px;
+      min-height: unset;    /* remove o limite */
     }
     .frame{
-      width: min(520px, 92%);
-      aspect-ratio: 1/1;
+      width: 100%;                 /* ocupa o card todo */
+      max-width: none;             /* tira o limite de 520px */
+      height: 100%;                /* tenta acompanhar a altura do lado esquerdo */
+      min-height: 520px;           /* garante “presença” no desktop */
+      aspect-ratio: 4 / 5;         /* RETRATO (mais parecido com o exemplo) */
       border-radius: 26px;
       border: 1px solid rgba(255,255,255,.12);
       background:
@@ -367,6 +377,12 @@
       overflow:hidden;
       transform-style: preserve-3d;
       transition: transform .25s ease;
+    }
+    @media (max-width: 900px){
+      .frame{
+        min-height: 420px;
+        aspect-ratio: 4 / 5; /* no mobile pode voltar ao quadrado ou mantém 4/5 se preferires */
+      }
     }
     .ring{
       position:absolute;
@@ -394,7 +410,7 @@
     }
     .heroMedia{
       position:absolute;
-      inset: 10%;
+      inset: 4%;
       border-radius: 22px;
       overflow:hidden;
       display:grid;
@@ -712,6 +728,15 @@
           I build digital products, hardware projects, and clean user experiences.
         </p>
 
+        <div class="actions">
+          <button class="btn primary" id="btnRefresh" type="button" aria-label="Refresh" data-i18n="refresh">
+            ⟳ Refresh
+          </button>
+          <button class="btn" id="btnCopy" type="button" aria-label="Copy link" data-i18n="copy_link">
+            ⧉ Copy link
+          </button>
+        </div>
+
         <div class="meta">
           <!-- EDIT HERE: quick highlights -->
           <span data-i18n="hero_meta1">⚡ Fast & responsive</span>
@@ -775,9 +800,15 @@
 
         <!-- EDIT HERE: add links -->
         <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="btn" href="#" title="GitHub"> <span data-i18n="about_link_github">GitHub</span></a>
-          <a class="btn" href="#" title="LinkedIn">in <span data-i18n="about_link_linkedin">LinkedIn</span></a>
-          <a class="btn" href="#" title="CV">⤓ <span data-i18n="about_link_cv">Download CV</span></a>
+          <a class="btn" href="https://github.com/portfolio-000" title="GitHub"> <span data-i18n="about_link_github">GitHub</span></a>
+          <a class="btn" href="https://www.linkedin.com/in/jos%C3%A9-jo%C3%A3o-dulo-muxito-1b669a349/" title="LinkedIn">in <span data-i18n="about_link_linkedin">LinkedIn</span></a>
+          <a class="btn"
+             href="files/C.V-José%20Muxito.pdf"
+             download="Jose_Muxito_CV.pdf"
+             title="CV">
+            ⤓ <span data-i18n="about_link_cv">Download CV</span>
+          </a>
+
         </div>
       </div>
 
@@ -1016,9 +1047,9 @@
         </p>
 
         <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="btn" href="#" data-i18n="contact_github">GitHub</a>
+          <a class="btn" href="https://github.com/portfolio-000" data-i18n="contact_github">GitHub</a>
           <a class="btn" href="https://www.linkedin.com/in/jos%C3%A9-jo%C3%A3o-dulo-muxito-1b669a349/" data-i18n="contact_linkedin">LinkedIn</a>
-          <a class="btn" href="#" data-i18n="contact_portfolio">Main Website</a>
+          <a class="btn" href="https://portfolio-000.github.io/portfolio/" data-i18n="contact_portfolio">Main Website</a>
         </div>
       </div>
 
@@ -1126,8 +1157,8 @@
       form_send: "Send message",
       form_sent: "✅ Message prepared (demo). Connect this form to a backend later.",
 
-      footer_brand: "Your Name",
-      footer_note: "Single-page portfolio template",
+      copy_link: "⧉ Copy Link",
+      refresh: "⟳ Refresh",
     },
 
     fr: {
@@ -1202,8 +1233,8 @@
       form_send: "Envoyer",
       form_sent: "✅ Message préparé (démo). Connectez ce formulaire à un backend plus tard.",
 
-      footer_brand: "Votre Nom",
-      footer_note: "Template portfolio (one-page)",
+      copy_link: "⧉ Copier Lien",
+      refresh: "⟳ Rafraîchir",
     },
 
     pt: {
@@ -1278,10 +1309,25 @@
       form_send: "Enviar mensagem",
       form_sent: "✅ Mensagem preparada (demo). Conecte este formulário a um backend depois.",
 
-      footer_brand: "Seu Nome",
-      footer_note: "Template de portfólio (uma página)",
+      copy_link: "⧉ Copiar Link",
+      refresh: "⟳ Atualizar",
     }
   };
+
+  // Copy link
+  btnCopy.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      btnCopy.textContent = '✓ OK';
+      setTimeout(() => (btnCopy.textContent = '⧉ Copy link'), 1400);
+    } catch (e) {
+      btnCopy.textContent = 'x NOT OK';
+      setTimeout(() => (btnCopy.textContent = '⧉ Copy link'), 1400);
+    }
+  });
+
+  // Refresh
+  btnRefresh.addEventListener('click', () => window.location.reload());
 
   function setLang(lang){
     const dict = i18n[lang] || i18n.en;
