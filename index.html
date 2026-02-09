@@ -1303,10 +1303,10 @@
   btnCopy.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      btnCopy.textContent = '✓ OK';
+      btnCopy.textContent = '✓ OK!';
       setTimeout(() => (btnCopy.textContent = '⧉ Copy link'), 1400);
     } catch (e) {
-      btnCopy.textContent = 'x NOT OK';
+      btnCopy.textContent = 'x NOT OK!';
       setTimeout(() => (btnCopy.textContent = '⧉ Copy link'), 1400);
     }
   });
@@ -1441,13 +1441,34 @@
     // Demo form
     const form = document.getElementById("contactForm");
     const status = document.getElementById("formStatus");
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", function(e) {
       e.preventDefault();
-      const lang = document.documentElement.dataset.lang || "en";
-      status.textContent = (i18n[lang] && i18n[lang].form_sent) ? i18n[lang].form_sent : i18n.en.form_sent;
-      form.reset();
+
+      emailjs.send("service_ykp5gdd", "template_mc8uhdi", {
+        name: this.name.value.trim(),
+        email: this.email.value.trim(),
+        message: this.message.value.trim(),
+        time: new Date().toLocaleString()
+      })
+        .then(function() {
+          status.textContent = "✅ OK!";
+          form.reset();
+        }, function(error) {
+          status.textContent = "❌ NOT OK!";
+          console.log(error);
+        });
     });
   })();
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+  (function(){
+    emailjs.init("rPs--Y9xyKK0i0KuA");
+  })();
+</script>
+
+
 </body>
 </html>

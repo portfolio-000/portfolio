@@ -1,0 +1,6 @@
+GMail_API
+
+Service ID : service_ykp5gdd
+Template ID : template_mc8uhdi
+Public Key : rPs--Y9xyKK0i0KuA
+Private Key : 6CGMJNRlHDJxGCN1pbpSq
