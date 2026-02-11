@@ -206,16 +206,19 @@
 
     /* Right side: animated logo frame */
     .stage{
-      padding: clamp(18px, 3vw, 28px);
+      padding: clamp(0px, 0vw, 0px); /* antes era bem maior */
       display:grid;
-      place-items:center;
+      place-items: stretch; /* deixa o frame ocupar o card */
       position:relative;
-      min-height: 360px;
+      min-height: unset;    /* remove o limite */
     }
 
     .logoFrame{
-      width: min(480px, 92%);
-      aspect-ratio: 1/1;
+      width: 100%;                 /* ocupa o card todo */
+      max-width: none;             /* tira o limite de 520px */
+      height: 100%;                /* tenta acompanhar a altura do lado esquerdo */
+      min-height: 520px;           /* garante “presença” no desktop */
+      aspect-ratio: 4 / 5;         /* RETRATO (mais parecido com o exemplo) */
       border-radius: 26px;
       border: 1px solid rgba(255,255,255,.12);
       background:
@@ -225,6 +228,7 @@
       position:relative;
       overflow:hidden;
       transform-style: preserve-3d;
+      transition: transform .25s ease;
     }
 
     /* Glowing ring */
@@ -234,12 +238,12 @@
       border-radius: 50%;
       background:
         conic-gradient(from 180deg,
-          rgba(56,182,255,0) 0%,
-          rgba(56,182,255,.30) 12%,
-          rgba(0,213,255,.24) 30%,
-          rgba(255,255,255,0) 55%,
-          rgba(120,90,255,.22) 72%,
-          rgba(56,182,255,0) 100%);
+        rgba(56,182,255,0) 0%,
+        rgba(56,182,255,.30) 12%,
+        rgba(0,213,255,.24) 30%,
+        rgba(255,255,255,0) 55%,
+        rgba(120,90,255,.22) 72%,
+        rgba(56,182,255,0) 100%);
       filter: blur(10px);
       opacity:.8;
       animation: spin 7s linear infinite;
@@ -267,14 +271,7 @@
       will-change: transform, filter;
       filter: drop-shadow(0 18px 35px rgba(0,0,0,.55));
     }
-    .logo img{
-      width:100%;
-      height:100%;
-      object-fit: contain;
-      display:block;
-      transform: translate3d(0,0,0);
-      border-radius: 22px;
-    }
+    .logo  img{ width:100%; height:100%; object-fit:cover; display:block; }
 
     /* Intro cinematic animation */
     .logoFrame.intro .logo{
@@ -327,137 +324,137 @@
 </head>
 
 <body>
-  <div class="orbs">
-    <div class="orb"></div>
-    <div class="orb"></div>
-    <div class="orb"></div>
-  </div>
-  <div class="noise"></div>
+<div class="orbs">
+  <div class="orb"></div>
+  <div class="orb"></div>
+  <div class="orb"></div>
+</div>
+<div class="noise"></div>
 
-  <main class="wrap">
-    <section class="grid">
-      <div class="card left">
-        <div class="badge">
-          <span class="dot"></span>
-          Under Development
-        </div>
-
-        <h1>We’re building something awesome.</h1>
-        <p>
-          This page is currently under development. We’re polishing the design, optimizing performance,
-          and preparing the full experience. Please check back soon.
-        </p>
-
-        <div class="actions">
-          <button class="btn primary" id="btnRefresh" type="button" aria-label="Refresh">
-            ⟳ Refresh
-          </button>
-          <button class="btn" id="btnCopy" type="button" aria-label="Copy link">
-            ⧉ Copy link
-          </button>
-        </div>
-
-        <div class="meta" aria-label="Status">
-          <span>⚡ Fast & responsive</span>
-          <span>🛠️ Work in progress</span>
-          <span>🔒 Secure by design</span>
-        </div>
-
-        <div class="foot">© <span id="year"></span> • X-FUTUR3</div>
+<main class="wrap">
+  <section class="grid">
+    <div class="card left">
+      <div class="badge">
+        <span class="dot"></span>
+        Under Development
       </div>
 
-      <div class="card stage">
-        <div class="logoFrame intro" id="frame" aria-label="Animated logo">
-          <div class="ring"></div>
-          <div class="spot"></div>
+      <h1>We’re building something awesome.</h1>
+      <p>
+        This page is currently under development. We’re polishing the design, optimizing performance,
+        and preparing the full experience. Please check back soon.
+      </p>
 
-          <div class="logo" id="logo">
-            <!-- Put your image in the same folder as this HTML and name it: x-futur3.png -->
-            <img src="x-futur3.png" alt="X-FUTUR3 logo" />
-          </div>
+      <div class="actions">
+        <button class="btn primary" id="btnRefresh" type="button" aria-label="Refresh">
+          ⟳ Refresh
+        </button>
+        <button class="btn" id="btnCopy" type="button" aria-label="Copy link">
+          ⧉ Copy link
+        </button>
+      </div>
+
+      <div class="meta" aria-label="Status">
+        <span>⚡ Fast & responsive</span>
+        <span>🛠️ Work in progress</span>
+        <span>🔒 Secure by design</span>
+      </div>
+
+      <div class="foot">© <span id="year"></span> • X-FUTUR3</div>
+    </div>
+
+    <div class="card stage">
+      <div class="logoFrame intro" id="frame" aria-label="Animated logo">
+        <div class="ring"></div>
+        <div class="spot"></div>
+
+        <div class="logo" id="logo">
+          <!-- Put your image in the same folder as this HTML and name it: x-futur3.png -->
+          <img src="img/jose_muxito.png" alt="José MUXITO" />
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+</main>
 
-  <script>
-    (function () {
-      const frame = document.getElementById('frame');
-      const logo = document.getElementById('logo');
-      const year = document.getElementById('year');
-      const btnCopy = document.getElementById('btnCopy');
-      const btnRefresh = document.getElementById('btnRefresh');
+<script>
+  (function () {
+    const frame = document.getElementById('frame');
+    const logo = document.getElementById('logo');
+    const year = document.getElementById('year');
+    const btnCopy = document.getElementById('btnCopy');
+    const btnRefresh = document.getElementById('btnRefresh');
 
-      year.textContent = new Date().getFullYear();
+    year.textContent = new Date().getFullYear();
 
-      // After the cinematic intro, start floating loop
-      const INTRO_MS = 1850;
-      window.setTimeout(() => {
-        frame.classList.remove('intro');
-        frame.classList.add('float');
-      }, INTRO_MS);
+    // After the cinematic intro, start floating loop
+    const INTRO_MS = 1850;
+    window.setTimeout(() => {
+      frame.classList.remove('intro');
+      frame.classList.add('float');
+    }, INTRO_MS);
 
-      // Copy link
-      btnCopy.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(window.location.href);
-          btnCopy.textContent = '✓ Link copied';
-          setTimeout(() => (btnCopy.textContent = '⧉ Copy link'), 1400);
-        } catch (e) {
-          btnCopy.textContent = 'Copy failed';
-          setTimeout(() => (btnCopy.textContent = '⧉ Copy link'), 1400);
-        }
+    // Copy link
+    btnCopy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        btnCopy.textContent = '✓ Link copied';
+        setTimeout(() => (btnCopy.textContent = '⧉ Copy link'), 1400);
+      } catch (e) {
+        btnCopy.textContent = 'Copy failed';
+        setTimeout(() => (btnCopy.textContent = '⧉ Copy link'), 1400);
+      }
+    });
+
+    // Refresh
+    btnRefresh.addEventListener('click', () => window.location.reload());
+
+    // Professional tilt interaction (desktop) + gentle parallax
+    let raf = null;
+    function onMove(e){
+      const rect = frame.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+
+      const x = (e.clientX - cx) / (rect.width / 2);
+      const y = (e.clientY - cy) / (rect.height / 2);
+
+      const tiltX = (-y * 8).toFixed(2);
+      const tiltY = ( x * 10).toFixed(2);
+      const lift = 1.01;
+
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        frame.style.transform = `perspective(900px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(${lift})`;
+        logo.style.transform = `translate3d(${(x*6).toFixed(2)}px, ${(y*6).toFixed(2)}px, 0)`;
       });
+    }
+    function onLeave(){
+      frame.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)';
+      logo.style.transform = 'translate3d(0,0,0)';
+    }
 
-      // Refresh
-      btnRefresh.addEventListener('click', () => window.location.reload());
+    // Only enable hover tilt on fine pointers (mouse/trackpad)
+    const finePointer = window.matchMedia('(pointer: fine)').matches;
+    if (finePointer) {
+      frame.addEventListener('mousemove', onMove);
+      frame.addEventListener('mouseleave', onLeave);
+    }
 
-      // Professional tilt interaction (desktop) + gentle parallax
-      let raf = null;
-      function onMove(e){
-        const rect = frame.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-
-        const x = (e.clientX - cx) / (rect.width / 2);
-        const y = (e.clientY - cy) / (rect.height / 2);
-
-        const tiltX = (-y * 8).toFixed(2);
-        const tiltY = ( x * 10).toFixed(2);
-        const lift = 1.01;
-
-        if (raf) cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(() => {
-          frame.style.transform = `perspective(900px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(${lift})`;
-          logo.style.transform = `translate3d(${(x*6).toFixed(2)}px, ${(y*6).toFixed(2)}px, 0)`;
-        });
-      }
-      function onLeave(){
-        frame.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)';
-        logo.style.transform = 'translate3d(0,0,0)';
-      }
-
-      // Only enable hover tilt on fine pointers (mouse/trackpad)
-      const finePointer = window.matchMedia('(pointer: fine)').matches;
-      if (finePointer) {
-        frame.addEventListener('mousemove', onMove);
-        frame.addEventListener('mouseleave', onLeave);
-      }
-
-      // Mobile: gentle auto sway (no mouse)
-      const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
-      if (coarsePointer) {
-        let t = 0;
-        const sway = () => {
-          t += 0.016;
-          const rx = Math.sin(t) * 2.2;
-          const ry = Math.cos(t * 0.9) * 2.6;
-          frame.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.01)`;
-          requestAnimationFrame(sway);
-        };
+    // Mobile: gentle auto sway (no mouse)
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    if (coarsePointer) {
+      let t = 0;
+      const sway = () => {
+        t += 0.016;
+        const rx = Math.sin(t) * 2.2;
+        const ry = Math.cos(t * 0.9) * 2.6;
+        frame.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.01)`;
         requestAnimationFrame(sway);
-      }
-    })();
-  </script>
+      };
+      requestAnimationFrame(sway);
+    }
+  })();
+</script>
 </body>
 </html>

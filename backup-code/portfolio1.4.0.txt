@@ -1,0 +1,1474 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio • Under Construction Template</title>
+  <meta name="description" content="Professional single-page portfolio template with EN/FR/PT translation." />
+
+  <style>
+    :root{
+      --bg0:#05070c;
+      --bg1:#070b14;
+      --fg:#e9eefc;
+      --muted:#aab6d6;
+
+      --blue:#38b6ff;
+      --blue2:#00d5ff;
+      --violet:#785aff;
+
+      --card: rgba(255,255,255,.06);
+      --stroke: rgba(255,255,255,.10);
+      --shadow: 0 30px 80px rgba(0,0,0,.55);
+      --radius: 28px;
+
+      --max: 1100px;
+      --headerH: 74px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--fg);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 800px at 50% 40%, rgba(56,182,255,.18), transparent 60%),
+        radial-gradient(900px 700px at 70% 80%, rgba(0,213,255,.12), transparent 55%),
+        radial-gradient(1000px 800px at 20% 85%, rgba(120,90,255,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    /* Smooth scrolling + section offset for fixed header */
+    html{ scroll-behavior:smooth; }
+    section{ scroll-margin-top: calc(var(--headerH) + 14px); }
+
+    /* Subtle animated noise (premium feel) */
+    .noise{
+      pointer-events:none;
+      position:fixed; inset:0;
+      opacity:.06;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+      animation: noiseShift 6s steps(10) infinite;
+      z-index:0;
+    }
+    @keyframes noiseShift{
+      0%{ transform:translate3d(0,0,0); }
+      100%{ transform:translate3d(-2%, 1.5%, 0); }
+    }
+
+    /* Background orbs */
+    .orbs{
+      position:fixed; inset:0;
+      pointer-events:none;
+      filter: blur(20px);
+      opacity:.9;
+      z-index:0;
+    }
+    .orb{
+      position:absolute;
+      width: min(48vw, 520px);
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(56,182,255,.30), rgba(0,0,0,0) 65%);
+      animation: drift 10s ease-in-out infinite alternate;
+    }
+    .orb:nth-child(1){ left:-10vw; top:10vh; animation-duration: 12s; }
+    .orb:nth-child(2){
+      width:min(55vw, 620px);
+      right:-15vw; top:35vh;
+      background: radial-gradient(circle at 40% 40%, rgba(0,213,255,.22), rgba(0,0,0,0) 65%);
+      animation-duration: 14s;
+    }
+    .orb:nth-child(3){
+      width:min(40vw, 460px);
+      left:10vw; bottom:-10vh;
+      background: radial-gradient(circle at 40% 40%, rgba(120,90,255,.18), rgba(0,0,0,0) 65%);
+      animation-duration: 16s;
+    }
+    @keyframes drift{
+      0%{ transform: translate3d(0,0,0) scale(1); }
+      100%{ transform: translate3d(6vw,-3vh,0) scale(1.05); }
+    }
+
+    /* Layout container */
+    .container{
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+      padding: 0 clamp(18px, 4vw, 48px);
+      position:relative;
+      z-index:1;
+    }
+
+    /* Header */
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(5,7,12,.82), rgba(5,7,12,.52));
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .headerInner{
+      height: var(--headerH);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 180px;
+    }
+    .brandLogo{
+      width:38px; height:38px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      overflow:hidden;
+      display:grid; place-items:center;
+      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+    }
+    .brandLogo img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .brandText{
+      display:flex; flex-direction:column;
+      line-height:1.1;
+    }
+    .brandText strong{ font-size: 14px; letter-spacing:.3px; }
+    .brandText span{ font-size: 12px; color: rgba(233,238,252,.65); }
+
+    nav{
+      display:flex;
+      gap: 6px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .navLink{
+      text-decoration:none;
+      color: rgba(233,238,252,.78);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: background .2s ease, border-color .2s ease, transform .2s ease;
+      white-space:nowrap;
+    }
+    .navLink:hover{
+      background: rgba(255,255,255,.06);
+      border-color: rgba(56,182,255,.22);
+      transform: translateY(-1px);
+    }
+    .navLink.active{
+      background: rgba(56,182,255,.12);
+      border-color: rgba(56,182,255,.35);
+      color: var(--fg);
+    }
+
+    .rightControls{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 220px;
+      justify-content:flex-end;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .btn{
+      cursor:pointer;
+      user-select:none;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.07);
+      color: var(--fg);
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 13px;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.10);
+      border-color: rgba(56,182,255,.35);
+    }
+    .btn.primary{
+      border-color: rgba(56,182,255,.40);
+      background: linear-gradient(135deg, rgba(56,182,255,.22), rgba(0,213,255,.12));
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+    }
+
+    /* Language select */
+    .select{
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: var(--fg);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-weight: 800;
+      font-size: 13px;
+      outline:none;
+    }
+
+    /* Mobile nav collapse */
+    .menuBtn{ display:none; }
+    @media (max-width: 900px){
+      .brand{ min-width:auto; }
+      .rightControls{ min-width:auto; }
+      nav{ display:none; }
+      .menuBtn{ display:inline-flex; }
+      .mobileNav{
+        display:none;
+        padding: 10px 0 14px;
+      }
+      .mobileNav.open{ display:block; }
+      .mobileNav a{
+        display:block;
+        margin: 6px 0;
+      }
+    }
+
+    /* Common cards */
+    .card{
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* Sections spacing */
+    .section{
+      padding: clamp(28px, 5vw, 60px) 0;
+    }
+    .sectionTitle{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .sectionTitle h2{
+      margin:0;
+      font-size: clamp(20px, 2.8vw, 34px);
+      letter-spacing: -0.02em;
+    }
+    .sectionTitle p{
+      margin:0;
+      color: var(--muted);
+      max-width: 60ch;
+      font-size: 14px;
+      line-height:1.5;
+    }
+
+    /* Hero */
+    .hero{
+      padding: clamp(18px, 4vw, 26px) 0 clamp(34px, 6vw, 70px);
+    }
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr; /* deixa os dois lados equivalentes */
+      gap: clamp(18px, 3vw, 28px);
+      align-items: stretch; /* ESTICA para a direita ter a mesma “altura visual” */
+    }
+    @media (max-width: 900px){
+      .heroGrid{ grid-template-columns: 1fr; }
+    }
+
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:10px 14px;
+      border-radius: 999px;
+      border:1px solid rgba(56,182,255,.25);
+      background: rgba(56,182,255,.10);
+      color: var(--fg);
+      font-weight: 900;
+      letter-spacing: .3px;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .dot{
+      width:9px; height:9px;
+      border-radius:50%;
+      background: var(--blue2);
+      box-shadow: 0 0 18px rgba(0,213,255,.65);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%,100%{ transform:scale(1); opacity:1; }
+      50%{ transform:scale(1.35); opacity:.7; }
+    }
+
+    .heroLeft{
+      padding: clamp(22px, 4vw, 44px);
+    }
+    .heroLeft h1{
+      margin: 14px 0 10px;
+      font-size: clamp(28px, 4.2vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+    .heroLeft p{
+      margin:0;
+      color: var(--muted);
+      font-size: clamp(15px, 1.6vw, 18px);
+      line-height: 1.55;
+      max-width: 60ch;
+    }
+    .meta{
+      margin-top: 16px;
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      color: rgba(233,238,252,.75);
+      font-size: 13px;
+    }
+    .meta span{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.10);
+    }
+
+    /* Right: hero image with cinematic + float */
+    .stage{
+      padding: clamp(0px, 0vw, 0px); /* antes era bem maior */
+      display:grid;
+      place-items: stretch; /* deixa o frame ocupar o card */
+      position:relative;
+      min-height: unset;    /* remove o limite */
+    }
+    .frame{
+      width: 100%;                 /* ocupa o card todo */
+      max-width: none;             /* tira o limite de 520px */
+      height: 100%;                /* tenta acompanhar a altura do lado esquerdo */
+      min-height: 520px;           /* garante “presença” no desktop */
+      aspect-ratio: 4 / 5;         /* RETRATO (mais parecido com o exemplo) */
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(500px 420px at 50% 40%, rgba(56,182,255,.18), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: 0 35px 90px rgba(0,0,0,.60);
+      position:relative;
+      overflow:hidden;
+      transform-style: preserve-3d;
+      transition: transform .25s ease;
+    }
+    @media (max-width: 900px){
+      .frame{
+        min-height: 420px;
+        aspect-ratio: 4 / 5; /* no mobile pode voltar ao quadrado ou mantém 4/5 se preferires */
+      }
+    }
+    .ring{
+      position:absolute;
+      inset:-40%;
+      border-radius: 50%;
+      background:
+        conic-gradient(from 180deg,
+        rgba(56,182,255,0) 0%,
+        rgba(56,182,255,.30) 12%,
+        rgba(0,213,255,.24) 30%,
+        rgba(255,255,255,0) 55%,
+        rgba(120,90,255,.22) 72%,
+        rgba(56,182,255,0) 100%);
+      filter: blur(10px);
+      opacity:.8;
+      animation: spin 7s linear infinite;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg); } }
+    .spot{
+      position:absolute;
+      inset:-25%;
+      background: radial-gradient(circle at 40% 35%, rgba(255,255,255,.12), transparent 55%);
+      transform: translate3d(0,0,40px);
+      pointer-events:none;
+    }
+    .heroMedia{
+      position:absolute;
+      inset: 4%;
+      border-radius: 22px;
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      transform-style: preserve-3d;
+      will-change: transform, filter;
+      filter: drop-shadow(0 18px 35px rgba(0,0,0,.55));
+    }
+    .heroMedia img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      border-radius: 22px;
+      transform: translate3d(0,0,0);
+    }
+
+    .frame.intro .heroMedia{
+      animation: introCinematic 1.8s cubic-bezier(.2,.9,.15,1) forwards;
+    }
+    @keyframes introCinematic{
+      0%{
+        transform: translate3d(0,30px,0) rotateX(22deg) rotateY(-35deg) rotateZ(-10deg) scale(.84);
+        filter: drop-shadow(0 10px 20px rgba(0,0,0,.35)) blur(0.3px);
+        opacity: 0;
+      }
+      40%{ opacity:1; }
+      70%{
+        transform: translate3d(0,-6px,0) rotateX(-8deg) rotateY(18deg) rotateZ(2deg) scale(1.02);
+      }
+      100%{
+        transform: translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+        filter: drop-shadow(0 18px 35px rgba(0,0,0,.55));
+        opacity: 1;
+      }
+    }
+    .frame.float .heroMedia{
+      animation: floaty 3.8s ease-in-out infinite;
+    }
+    @keyframes floaty{
+      0%,100%{ transform: translate3d(0,0,0) rotateZ(0deg) scale(1); }
+      50%{ transform: translate3d(0,-10px,0) rotateZ(.8deg) scale(1.01); }
+    }
+
+    /* Content grids */
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(14px, 2.4vw, 18px);
+    }
+    @media (max-width: 900px){
+      .grid2{ grid-template-columns: 1fr; }
+    }
+
+    .pad{
+      padding: clamp(18px, 3.4vw, 28px);
+    }
+
+    /* Timeline */
+    .timeline{
+      display:grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .tItem{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.10);
+      border-radius: 18px;
+      padding: 14px 14px;
+    }
+    .tItem .row{
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+      align-items:baseline;
+    }
+    .tItem strong{ font-size: 14px; }
+    .tItem span{ color: rgba(233,238,252,.65); font-size: 12px; }
+    .tItem p{ margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height:1.5; }
+
+    /* Projects */
+    .projects{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(12px, 2.2vw, 16px);
+    }
+    @media (max-width: 1050px){ .projects{ grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 680px){ .projects{ grid-template-columns: 1fr; } }
+
+    .projectCard{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.10);
+      border-radius: 22px;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height: 260px;
+    }
+    .thumb{
+      height: 140px;
+      background: radial-gradient(400px 220px at 40% 40%, rgba(56,182,255,.22), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display:grid;
+      place-items:center;
+      color: rgba(233,238,252,.75);
+      font-weight: 900;
+      letter-spacing:.3px;
+    }
+    .projectBody{ padding: 14px 14px 16px; display:grid; gap: 8px; }
+    .projectBody h3{ margin:0; font-size: 16px; letter-spacing:-.01em; }
+    .projectBody p{ margin:0; color: var(--muted); font-size: 14px; line-height:1.5; }
+    .tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top: 6px; }
+    .tag{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: rgba(233,238,252,.78);
+      font-weight: 800;
+    }
+
+    /* Gallery / Media placeholders */
+    .mediaGrid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+    }
+    .mediaBox{
+      border:1px dashed rgba(255,255,255,.20);
+      background: rgba(255,255,255,.03);
+      border-radius: 22px;
+      min-height: 160px;
+      display:grid;
+      place-items:center;
+      color: rgba(233,238,252,.65);
+      font-weight: 800;
+      padding: 16px;
+      text-align:center;
+    }
+    .mediaBox.large{ grid-column: span 7; min-height: 280px; }
+    .mediaBox.small{ grid-column: span 5; }
+    @media (max-width: 900px){
+      .mediaBox.large, .mediaBox.small{ grid-column: span 12; }
+    }
+
+    /* Contact */
+    form{
+      display:grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    input, textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: var(--fg);
+      outline:none;
+      font-size: 14px;
+    }
+    textarea{ min-height: 120px; resize: vertical; }
+    input::placeholder, textarea::placeholder{ color: rgba(233,238,252,.45); }
+
+    footer{
+      padding: 22px 0 34px;
+      color: rgba(233,238,252,.55);
+      font-size: 12px;
+      text-align:center;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .ring,.orb,.noise,.frame.intro .heroMedia,.frame.float .heroMedia{ animation:none !important; }
+      .frame{ transition:none; }
+    }
+
+    /* FIX: prevent duplicated header nav */
+    @media (min-width: 901px){
+      #mobileNav{ display: none !important; }
+      nav[aria-label="Primary navigation"]{ display: flex !important; }
+    }
+
+    @media (max-width: 900px){
+      nav[aria-label="Primary navigation"]{ display: none !important; }
+      #mobileNav{ display: none; }
+      #mobileNav.open{ display: block; }
+    }
+
+    /* Ensure media fits nicely inside cards */
+    .thumb, .mediaBox{
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Make images/videos/iframes fill the containers */
+    .thumb img, .thumb video,
+    .mediaBox img, .mediaBox video,
+    .mediaBox iframe{
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* Optional: remove video black bars on some browsers */
+    .mediaBox video{
+      background: #000;
+    }
+
+    /* Optional: professional hover zoom on project thumbnails */
+    .projectCard .thumb img,
+    .projectCard .thumb video{
+      transform: scale(1.02);
+      transition: transform .35s ease;
+    }
+    .projectCard:hover .thumb img,
+    .projectCard:hover .thumb video{
+      transform: scale(1.08);
+    }
+
+    .mediaBox iframe{
+      width: 100%;
+      height: 100%;
+      border: 0;
+      border-radius: 18px;
+    }
+  </style>
+</head>
+
+<body>
+<div class="orbs">
+  <div class="orb"></div><div class="orb"></div><div class="orb"></div>
+</div>
+<div class="noise"></div>
+
+<!-- =========================
+     HEADER (sticky + nav)
+     ========================= -->
+<header>
+  <div class="container">
+    <div class="headerInner">
+      <!-- Brand (logo + name) -->
+      <div class="brand">
+        <div class="brandLogo" title="Logo">
+          <!-- OPTIONAL: Put your logo file in the same folder (x-futur3.png) -->
+          <img src="img/jose_muxito.png" alt="Brand logo" onerror="this.style.display='none'; this.parentElement.textContent='X';" />
+        </div>
+        <div class="brandText">
+          <!-- EDIT HERE: your name/company -->
+          <strong>José MUXITO</strong>
+          <span data-i18n="brand_role">Developer • Designer • Engineer</span>
+        </div>
+      </div>
+
+      <!-- Desktop nav -->
+      <nav aria-label="Primary navigation">
+        <a class="navLink" href="#home" data-section="home" data-i18n="nav_home">Home</a>
+        <a class="navLink" href="#about" data-section="about" data-i18n="nav_about">About</a>
+        <a class="navLink" href="#skills" data-section="skills" data-i18n="nav_skills">Skills</a>
+        <a class="navLink" href="#projects" data-section="projects" data-i18n="nav_projects">Projects</a>
+        <a class="navLink" href="#media" data-section="media" data-i18n="nav_media">Media</a>
+        <a class="navLink" href="#contact" data-section="contact" data-i18n="nav_contact">Contact</a>
+      </nav>
+
+      <div class="rightControls">
+        <!-- Language switcher -->
+        <select class="select" id="langSelect" aria-label="Language">
+          <option value="en">EN</option>
+          <option value="fr">FR</option>
+          <option value="pt">PT</option>
+        </select>
+
+        <!-- CTA button (edit link) -->
+        <a class="btn primary" href="#contact" data-i18n="cta_contact">Let’s talk</a>
+
+        <!-- Mobile menu button -->
+        <button class="btn menuBtn" id="menuBtn" type="button" aria-label="Menu">☰</button>
+      </div>
+    </div>
+
+    <!-- Mobile nav panel -->
+    <div class="mobileNav" id="mobileNav" aria-label="Mobile navigation">
+      <a class="navLink" href="#home" data-section="home" data-i18n="nav_home">Home</a>
+      <a class="navLink" href="#about" data-section="about" data-i18n="nav_about">About</a>
+      <a class="navLink" href="#skills" data-section="skills" data-i18n="nav_skills">Skills</a>
+      <a class="navLink" href="#projects" data-section="projects" data-i18n="nav_projects">Projects</a>
+      <a class="navLink" href="#media" data-section="media" data-i18n="nav_media">Media</a>
+      <a class="navLink" href="#contact" data-section="contact" data-i18n="nav_contact">Contact</a>
+    </div>
+  </div>
+</header>
+
+<!-- =========================
+     HERO (Home)
+     ========================= -->
+<section id="home" class="section hero">
+  <div class="container">
+    <div class="heroGrid">
+      <div class="card heroLeft">
+        <div class="badge">
+          <span class="dot"></span>
+          <span data-i18n="hero_badge">Portfolio</span>
+        </div>
+
+        <!-- EDIT HERE: main headline -->
+        <h1>José MUXITO</h1>
+        <h1 data-i18n="hero_title">Professional Portfolio</h1>
+
+        <!-- EDIT HERE: short intro -->
+        <p data-i18n="hero_subtitle">
+          I build digital products, hardware projects, and clean user experiences.
+        </p>
+
+        <div class="actions">
+          <button class="btn primary" id="btnRefresh" type="button" aria-label="Refresh" data-i18n="refresh">
+            ⟳ Refresh
+          </button>
+          <button class="btn" id="btnCopy" type="button" aria-label="Copy link" data-i18n="copy_link">
+            ⧉ Copy link
+          </button>
+        </div>
+
+        <div class="meta">
+          <!-- EDIT HERE: quick highlights -->
+          <span data-i18n="hero_meta1">⚡ Fast & responsive</span>
+          <span data-i18n="hero_meta2">🧩 Modular sections</span>
+          <span data-i18n="hero_meta3">🌍 EN / FR / PT</span>
+        </div>
+
+        <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+          <!-- EDIT HERE: buttons -->
+          <a class="btn primary" href="#projects" data-i18n="hero_btn_projects">View Projects</a>
+          <a class="btn" href="#about" data-i18n="hero_btn_about">About Me</a>
+        </div>
+
+        <div style="margin-top:14px; color: rgba(233,238,252,.55); font-size:12px;">
+          © <span id="year"></span> • <span>José MUXITO</span>
+        </div>
+      </div>
+
+      <div class="card stage">
+        <!-- IMAGE / COVER area (your edited photo) -->
+        <div class="frame intro" id="heroFrame" aria-label="Hero image">
+          <div class="ring"></div>
+          <div class="spot"></div>
+
+          <div class="heroMedia" id="heroMedia">
+            <!-- EDIT HERE: put your hero image file name -->
+            <img src="img/jose_muxito.png" alt="Hero cover image"
+                 onerror="this.style.objectFit='contain'; this.style.opacity='.9'; this.src='img/jose_muxito.png';" />
+            <!-- TIP: If you want a VIDEO instead of image, replace with:
+              <video src="hero.mp4" autoplay muted loop playsinline></video>
+            -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     ABOUT
+     ========================= -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="sectionTitle">
+      <div>
+        <h2 data-i18n="about_title">About</h2>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card pad">
+        <!-- EDIT HERE: Bio text -->
+        <p data-i18n="about_bio">
+          Write your biography here. Mention your background, your main interests, what you’re currently learning,
+          and what kind of projects you enjoy building.
+        </p>
+
+        <!-- EDIT HERE: add links -->
+        <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn" href="https://github.com/portfolio-000" title="GitHub"> <span data-i18n="about_link_github">GitHub</span></a>
+          <a class="btn" href="https://www.linkedin.com/in/jos%C3%A9-jo%C3%A3o-dulo-muxito-1b669a349/" title="LinkedIn">in <span data-i18n="about_link_linkedin">LinkedIn</span></a>
+          <a class="btn"
+             href="files/C.V-José%20Muxito.pdf"
+             download="Jose_Muxito_CV.pdf"
+             title="CV">
+            ⤓ <span data-i18n="about_link_cv">Download CV</span>
+          </a>
+
+        </div>
+      </div>
+
+      <div class="card pad">
+        <h3 style="margin:0 0 6px; font-size:16px;" data-i18n="about_timeline_title">Timeline</h3>
+        <div class="timeline">
+          <!-- EDIT HERE: timeline items -->
+          <div class="tItem">
+            <div class="row">
+              <strong data-i18n="tl1_title">Education / Training</strong>
+              <span data-i18n="tl1_time">2024 — Present</span>
+            </div>
+            <p data-i18n="tl1_text">Describe your studies, certifications, or learning path.</p>
+          </div>
+
+          <div class="tItem">
+            <div class="row">
+              <strong data-i18n="tl2_title">First Professional Experience</strong>
+              <span data-i18n="tl2_time">2023 — 2024</span>
+            </div>
+            <p data-i18n="tl2_text">Describe what you did, your role, and what you delivered.</p>
+          </div>
+
+          <div class="tItem">
+            <div class="row">
+              <strong data-i18n="tl3_title">Projects & Growth</strong>
+              <span data-i18n="tl3_time">Ongoing</span>
+            </div>
+            <p data-i18n="tl3_text">Highlight your progress and what you’re building next.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- =========================
+     SKILLS
+     ========================= -->
+<section id="skills" class="section">
+  <div class="container">
+    <div class="sectionTitle">
+      <div>
+        <h2 data-i18n="skills_title">Skills</h2>
+      </div>
+    </div>
+
+    <div class="card pad">
+      <!-- EDIT HERE: skill tags -->
+      <div class="tags" aria-label="Skill tags">
+        <span class="tag">HTML</span>
+        <span class="tag">CSS</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">UI/UX</span>
+        <span class="tag">Git</span>
+        <span class="tag">KiCad</span>
+        <span class="tag">PCB Design</span>
+        <span class="tag">Python</span>
+        <span class="tag">Embedded</span>
+      </div>
+
+      <!-- EDIT HERE: optionally add skill paragraphs -->
+      <p style="margin-top:12px;" data-i18n="skills_note">
+        Tip: You can split skills into categories like Frontend, Backend, Hardware, Tools, etc.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     PROJECTS
+     ========================= -->
+<section id="projects" class="section">
+  <div class="container">
+    <div class="sectionTitle">
+      <div>
+        <h2 data-i18n="projects_title">Projects</h2>
+      </div>
+    </div>
+
+    <div class="card pad">
+      <div class="projects">
+        <!-- PROJECT CARD 1 (IMAGE) -->
+        <article class="projectCard">
+          <div class="thumb">
+            <!-- EDIT HERE: project image -->
+            <img src="img/projects/JVL.png" alt="Project 1">
+          </div>
+
+          <div class="projectBody">
+            <h3 data-i18n="p1_title">Jeu de Vitesse Lumineux</h3>
+            <p data-i18n="p1_desc">
+              Short description: what problem it solves, what you built, and the result.
+            </p>
+            <div class="tags">
+              <span class="tag">Tag</span><span class="tag">Tag</span><span class="tag">Tag</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT CARD 2 (VIDEO PREVIEW) -->
+        <article class="projectCard">
+          <div class="thumb">
+            <!-- EDIT HERE: project video (remove controls if you want it cleaner) -->
+            <img src="img/projects/sumobix.png" alt="Project 2">
+          </div>
+
+          <div class="projectBody">
+            <h3 data-i18n="p2_title">Robô-Sumo</h3>
+            <p data-i18n="p2_desc">Add screenshots, links, and technologies used.</p>
+            <div class="tags">
+              <span class="tag">Hardware</span><span class="tag">PCB</span><span class="tag">SMD</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT CARD 3 (IMAGE) -->
+        <article class="projectCard">
+          <div class="thumb">
+            <!-- EDIT HERE: another image -->
+            <img src="img/projects/project3.jpg" alt="Project 3">
+          </div>
+
+          <div class="projectBody">
+            <h3 data-i18n="p3_title">Project Title #3</h3>
+            <p data-i18n="p3_desc">This area is ready for your portfolio content.</p>
+            <div class="tags">
+              <span class="tag">Web</span><span class="tag">Design</span><span class="tag">JS</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     MEDIA (Gallery / Posts / Videos)
+     ========================= -->
+<section id="media" class="section">
+  <div class="container">
+    <div class="sectionTitle">
+      <div>
+        <h2 data-i18n="media_title">Media</h2>
+      </div>
+    </div>
+
+    <div class="card pad">
+      <div class="mediaGrid">
+
+        <!-- LARGE: VIDEO (your current one) -->
+        <div class="mediaBox large">
+          <iframe
+            src="https://www.youtube.com//embed/wD4fFOa9Dy4"
+            title="YouTube video player"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <!-- SMALL: IMAGE (replace placeholder text with an image) -->
+        <div class="mediaBox small">
+          <iframe
+            src="https://www.youtube.com//embed/eMok7hbUyDY?"
+            title="YouTube video player"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <!-- SMALL: YOUTUBE EMBED (replace VIDEO_ID) -->
+        <div class="mediaBox small">
+          <iframe
+            src="https://www.youtube.com//embed/x8Fl97D0mi4"
+            title="YouTube video player"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <!-- LARGE: POSTS / NOTES (keep your text block) -->
+        <div class="mediaBox large">
+          <iframe
+            src="https://www.youtube.com//embed/dpNvFBrrfBg"
+            title="YouTube video player"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     CONTACT
+     ========================= -->
+<section id="contact" class="section">
+  <div class="container">
+    <div class="sectionTitle">
+      <div>
+        <h2 data-i18n="contact_title">Contact</h2>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card pad">
+        <!-- EDIT HERE: contact info -->
+        <p data-i18n="contact_text">
+          Email: <a href="mailto:jose.muxito@etu.univ-lyon1.fr">jose.muxito@etu.univ-lyon1.fr</a><br/>
+          Location: Lyon, France<br/>
+          Availability: Open to opportunities
+        </p>
+
+        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn" href="https://github.com/portfolio-000" data-i18n="contact_github">GitHub</a>
+          <a class="btn" href="https://www.linkedin.com/in/jos%C3%A9-jo%C3%A3o-dulo-muxito-1b669a349/" data-i18n="contact_linkedin">LinkedIn</a>
+          <a class="btn" href="https://portfolio-000.github.io/portfolio/" data-i18n="contact_portfolio">Main Website</a>
+        </div>
+      </div>
+
+      <div class="card pad">
+        <!-- DEMO FORM (front-end only) -->
+        <form id="contactForm">
+          <input type="text" name="name" placeholder="Your name" data-i18n-placeholder="form_name" required>
+          <input type="email" name="email" placeholder="Your email" data-i18n-placeholder="form_email" required>
+          <textarea name="message" placeholder="Your message" data-i18n-placeholder="form_message" required></textarea>
+          <button class="btn primary" type="submit" data-i18n="form_send">Send message</button>
+          <div id="formStatus" style="color: rgba(233,238,252,.75); font-size:13px;"></div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span>© <span id="year2"></span> • </span>
+    <span>José MUXITO</span>
+    <span> • </span>
+    <span>X-FUTUR3</span>
+  </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+  (function(){
+    emailjs.init("rPs--Y9xyKK0i0KuA");
+  })();
+</script>
+
+<script>
+  // ==========================================================
+  // 1) Translation system (EN / FR / PT)
+  //    - Add/modify keys inside i18n object.
+  //    - Use data-i18n on elements to translate textContent.
+  //    - Use data-i18n-placeholder on inputs to translate placeholders.
+  // ==========================================================
+  const i18n = {
+    en: {
+      brand_role: "Developer • Designer • Engineer",
+      nav_home: "Home",
+      nav_about: "About",
+      nav_skills: "Skills",
+      nav_projects: "Projects",
+      nav_media: "Media",
+      nav_contact: "Contact",
+      cta_contact: "Let’s talk",
+
+      hero_badge: "Portfolio",
+      hero_title: "Professional Portfolio",
+      hero_subtitle: "I build digital products, hardware projects, and clean user experiences.",
+      hero_meta1: "⚡ Fast & responsive",
+      hero_meta2: "🧩 Modular sections",
+      hero_meta3: "🌍 EN / FR / PT",
+      hero_btn_projects: "View Projects",
+      hero_btn_about: "About Me",
+
+      about_title: "About",
+      about_desc: "A short presentation about who you are, your mission, and your journey. Replace the text below with your real story.",
+      about_bio: "Write your biography here. Mention your background, your main interests, what you’re currently learning, and what kind of projects you enjoy building.",
+      about_link_github: "GitHub",
+      about_link_linkedin: "LinkedIn",
+      about_link_cv: "Download CV",
+      about_timeline_title: "Timeline",
+      tl1_title: "Education / Training",
+      tl1_time: "2024 — Present",
+      tl1_text: "Describe your studies, certifications, or learning path.",
+      tl2_title: "First Professional Experience",
+      tl2_time: "2023 — 2024",
+      tl2_text: "Describe what you did, your role, and what you delivered.",
+      tl3_title: "Projects & Growth",
+      tl3_time: "Ongoing",
+      tl3_text: "Highlight your progress and what you’re building next.",
+
+      skills_title: "Skills",
+      skills_desc: "Add your skills here. Keep it simple and readable. You can replace these tags with your real stack.",
+      skills_note: "Tip: You can split skills into categories like Frontend, Backend, Hardware, Tools, etc.",
+
+      projects_title: "Projects",
+      projects_desc: "Add your projects here. Each card has a placeholder thumbnail and space for a summary and tags.",
+      p1_title: "Light Speed Game.",
+      p1_desc: "Short description: what problem it solves, what you built, and the result.",
+      p2_title: "Sumo-Robot",
+      p2_desc: "Add screenshots, links, and technologies used.",
+      p3_title: "Project Title #3",
+      p3_desc: "This area is ready for your portfolio content.",
+
+      media_title: "Media",
+      media_desc: "Use this section for photos, videos, blog-style posts, certificates, or any highlights.",
+      media_box1_title: "Feature Media",
+      media_box1_desc: "Put a big image or embedded video here.",
+      media_box2_title: "Gallery Item",
+      media_box2_desc: "Add a photo, certificate, or screenshot.",
+      media_box3_title: "Gallery Item",
+      media_box3_desc: "Add another media item here.",
+      media_box4_title: "Posts / Notes",
+      media_box4_desc: "You can write updates or embed a timeline of posts.",
+
+      contact_title: "Contact",
+      contact_desc: "Add your email, social links, or a simple form. (This form is demo-only; you can connect it later.)",
+      contact_text: "Email: <a href=\"mailto:jose.muxito@etu.univ-lyon1.fr\">jose.muxito@etu.univ-lyon1.fr</a><br/>Location: Lyon, France<br/>Availability: Open to opportunities",
+      contact_github: "GitHub",
+      contact_linkedin: "LinkedIn",
+      contact_portfolio: "Main Website",
+      form_name: "Your name",
+      form_email: "Your email",
+      form_message: "Your message",
+      form_send: "Send message",
+      form_sent: "✅ Message prepared (demo). Connect this form to a backend later.",
+
+      copy_link: "⧉ Copy Link",
+      refresh: "⟳ Refresh",
+    },
+
+    fr: {
+      brand_role: "Développeur • Designer • Ingénieur",
+      nav_home: "Accueil",
+      nav_about: "À propos",
+      nav_skills: "Compétences",
+      nav_projects: "Projets",
+      nav_media: "Médias",
+      nav_contact: "Contact",
+      cta_contact: "On échange",
+
+      hero_badge: "Portfolio",
+      hero_title: "Portfolio Professionnel",
+      hero_subtitle: "Je crée des produits numériques, des projets hardware et des expériences utilisateur propres.",
+      hero_meta1: "⚡ Rapide & responsive",
+      hero_meta2: "🧩 Sections modulaires",
+      hero_meta3: "🌍 EN / FR / PT",
+      hero_btn_projects: "Voir les projets",
+      hero_btn_about: "À propos",
+
+      about_title: "À propos",
+      about_desc: "Une présentation courte de qui vous êtes, votre mission et votre parcours. Remplacez le texte ci-dessous par votre histoire réelle.",
+      about_bio: "Écrivez votre biographie ici. Mentionnez votre parcours, vos centres d’intérêt, ce que vous apprenez actuellement et le type de projets que vous aimez construire.",
+      about_link_github: "GitHub",
+      about_link_linkedin: "LinkedIn",
+      about_link_cv: "Télécharger le CV",
+      about_timeline_title: "Chronologie",
+      tl1_title: "Études / Formation",
+      tl1_time: "2024 — Aujourd’hui",
+      tl1_text: "Décrivez vos études, certifications ou parcours d’apprentissage.",
+      tl2_title: "Première expérience pro",
+      tl2_time: "2023 — 2024",
+      tl2_text: "Décrivez votre rôle et ce que vous avez livré.",
+      tl3_title: "Projets & progression",
+      tl3_time: "En cours",
+      tl3_text: "Mettez en avant votre progression et ce que vous construisez ensuite.",
+
+      skills_title: "Compétences",
+      skills_desc: "Ajoutez vos compétences ici. Simple et lisible. Remplacez ces tags par votre stack réelle.",
+      skills_note: "Astuce : vous pouvez regrouper par catégories (Frontend, Backend, Hardware, Outils, etc.).",
+
+      projects_title: "Projets",
+      projects_desc: "Ajoutez vos projets ici. Chaque carte a une vignette et un espace pour le résumé + tags.",
+      p1_title: "Jeu de Vitesse Lumineux",
+      p1_desc: "Description courte : le problème, ce que vous avez construit, et le résultat.",
+      p2_title: "Robot-Sumo",
+      p2_desc: "Ajoutez captures, liens et technologies utilisées.",
+      p3_title: "Projet #3",
+      p3_desc: "Zone prête pour votre contenu.",
+
+      media_title: "Médias",
+      media_desc: "Utilisez cette section pour photos, vidéos, posts, certificats, ou moments forts.",
+      media_box1_title: "Média à la une",
+      media_box1_desc: "Mettez ici une grande image ou une vidéo intégrée.",
+      media_box2_title: "Élément galerie",
+      media_box2_desc: "Ajoutez une photo, un certificat, ou une capture.",
+      media_box3_title: "Élément galerie",
+      media_box3_desc: "Ajoutez un autre élément média ici.",
+      media_box4_title: "Posts / Notes",
+      media_box4_desc: "Vous pouvez écrire des mises à jour ou intégrer des notes.",
+
+      contact_title: "Contact",
+      contact_desc: "Ajoutez votre email, liens sociaux ou un formulaire. (Démo : à connecter plus tard.)",
+      contact_text: "Email : <a href=\"mailto:jose.muxito@etu.univ-lyon1.fr\">jose.muxito@etu.univ-lyon1.fr</a><br/>Localisation : Lyon, France<br/>Disponibilité : Ouvert aux opportunités",
+      contact_github: "GitHub",
+      contact_linkedin: "LinkedIn",
+      contact_portfolio: "Site principal",
+      form_name: "Votre nom",
+      form_email: "Votre email",
+      form_message: "Votre message",
+      form_send: "Envoyer",
+      form_sent: "✅ Message préparé (démo). Connectez ce formulaire à un backend plus tard.",
+
+      copy_link: "⧉ Copier Lien",
+      refresh: "⟳ Rafraîchir",
+    },
+
+    pt: {
+      brand_role: "Desenvolvedor • Designer • Engenheiro",
+      nav_home: "Início",
+      nav_about: "Sobre",
+      nav_skills: "Habilidades",
+      nav_projects: "Projetos",
+      nav_media: "Mídia",
+      nav_contact: "Contato",
+      cta_contact: "Vamos falar",
+
+      hero_badge: "Portfólio",
+      hero_title: "Portfólio Profissional",
+      hero_subtitle: "Eu construo produtos digitais, projetos de hardware e experiências de usuário limpas.",
+      hero_meta1: "⚡ Rápido & responsivo",
+      hero_meta2: "🧩 Seções modulares",
+      hero_meta3: "🌍 EN / FR / PT",
+      hero_btn_projects: "Ver projetos",
+      hero_btn_about: "Sobre mim",
+
+      about_title: "Sobre",
+      about_desc: "Uma apresentação curta sobre você, sua missão e sua jornada. Troque o texto abaixo pela sua história real.",
+      about_bio: "Escreva sua biografia aqui. Conte seu histórico, interesses, o que está aprendendo e que tipo de projetos gosta de construir.",
+      about_link_github: "GitHub",
+      about_link_linkedin: "LinkedIn",
+      about_link_cv: "Baixar CV",
+      about_timeline_title: "Linha do tempo",
+      tl1_title: "Estudos / Formação",
+      tl1_time: "2024 — Atual",
+      tl1_text: "Descreva seus estudos, certificações ou caminho de aprendizagem.",
+      tl2_title: "Primeira experiência profissional",
+      tl2_time: "2023 — 2024",
+      tl2_text: "Descreva seu papel e o que você entregou.",
+      tl3_title: "Projetos & evolução",
+      tl3_time: "Em andamento",
+      tl3_text: "Mostre sua evolução e o que você está construindo a seguir.",
+
+      skills_title: "Habilidades",
+      skills_desc: "Adicione suas habilidades aqui. Simples e legível. Substitua as tags pelo seu stack real.",
+      skills_note: "Dica: você pode separar por categorias (Frontend, Backend, Hardware, Ferramentas, etc.).",
+
+      projects_title: "Projetos",
+      projects_desc: "Adicione seus projetos aqui. Cada card tem miniatura e espaço para resumo + tags.",
+      p1_title: "Jogo de Luz e Velocidade",
+      p1_desc: "Descrição curta: problema, o que você construiu e o resultado.",
+      p2_title: "Robô-Sumo",
+      p2_desc: "Adicione prints, links e tecnologias usadas.",
+      p3_title: "Projeto #3",
+      p3_desc: "Área pronta para seu conteúdo.",
+
+      media_title: "Mídia",
+      media_desc: "Use esta seção para fotos, vídeos, posts, certificados ou destaques.",
+      media_box1_title: "Mídia em destaque",
+      media_box1_desc: "Coloque aqui uma imagem grande ou um vídeo embutido.",
+      media_box2_title: "Item de galeria",
+      media_box2_desc: "Adicione uma foto, certificado ou screenshot.",
+      media_box3_title: "Item de galeria",
+      media_box3_desc: "Adicione outro item de mídia aqui.",
+      media_box4_title: "Posts / Notas",
+      media_box4_desc: "Você pode escrever atualizações ou colocar notas.",
+
+      contact_title: "Contato",
+      contact_desc: "Adicione seu email, redes sociais ou um formulário. (Demo: conecte depois.)",
+      contact_text: "Email: <a href=\"mailto:jose.muxito@etu.univ-lyon1.fr\">jose.muxito@etu.univ-lyon1.fr</a><br/>Localização: Lyon, França<br/>Disponibilidade: Aberto a oportunidades",
+      contact_github: "GitHub",
+      contact_linkedin: "LinkedIn",
+      contact_portfolio: "Site principal",
+      form_name: "Seu nome",
+      form_email: "Seu email",
+      form_message: "Sua mensagem",
+      form_send: "Enviar mensagem",
+      form_sent: "✅ Mensagem preparada (demo). Conecte este formulário a um backend depois.",
+
+      copy_link: "⧉ Copiar Link",
+      refresh: "⟳ Atualizar",
+    }
+  };
+
+  // Copy link
+  btnCopy.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      btnCopy.textContent = '✓ OK!';
+      setTimeout(() => (btnCopy.textContent = '⧉ Copy link'), 1400);
+    } catch (e) {
+      btnCopy.textContent = 'x NOT OK!';
+      setTimeout(() => (btnCopy.textContent = '⧉ Copy link'), 1400);
+    }
+  });
+
+  // Refresh
+  btnRefresh.addEventListener('click', () => window.location.reload());
+
+  function setLang(lang){
+    const dict = i18n[lang] || i18n.en;
+    document.documentElement.lang = lang;
+    document.documentElement.dataset.lang = lang;
+
+    // Translate text nodes
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+
+    // Translate placeholders
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+      const key = el.getAttribute("data-i18n-placeholder");
+      if (dict[key] !== undefined) el.setAttribute("placeholder", dict[key]);
+    });
+
+    // Special: multiline contact_text uses \n
+    const contactTextEl = document.querySelector("[data-i18n='contact_text']");
+    if (contactTextEl && dict.contact_text) {
+      contactTextEl.innerHTML = dict.contact_text.replaceAll("\n","<br/>");
+    }
+
+    // Persist choice
+    localStorage.setItem("lang", lang);
+    const select = document.getElementById("langSelect");
+    if (select) select.value = lang;
+  }
+
+  // ==========================================================
+  // 2) UI behaviors:
+  //    - Hero animation: intro -> float
+  //    - Tilt on desktop / gentle sway on mobile
+  //    - Active nav highlighting based on scroll (IntersectionObserver)
+  //    - Mobile menu toggle
+  //    - Demo contact form submission
+  // ==========================================================
+  (function init(){
+    const year = new Date().getFullYear();
+    document.getElementById("year").textContent = year;
+    document.getElementById("year2").textContent = year;
+
+    // Language init
+    const saved = localStorage.getItem("lang") || "en";
+    setLang(saved);
+    document.getElementById("langSelect").addEventListener("change", (e) => setLang(e.target.value));
+
+    // Mobile menu
+    const menuBtn = document.getElementById("menuBtn");
+    const mobileNav = document.getElementById("mobileNav");
+    if (menuBtn){
+      menuBtn.addEventListener("click", () => mobileNav.classList.toggle("open"));
+      mobileNav.addEventListener("click", (e) => {
+        if (e.target.matches("a")) mobileNav.classList.remove("open");
+      });
+    }
+
+    // Hero intro -> float
+    const frame = document.getElementById("heroFrame");
+    const media = document.getElementById("heroMedia");
+    setTimeout(() => {
+      frame.classList.remove("intro");
+      frame.classList.add("float");
+    }, 1850);
+
+    // Tilt / parallax
+    let raf = null;
+    function onMove(e){
+      const rect = frame.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const x = (e.clientX - cx) / (rect.width / 2);
+      const y = (e.clientY - cy) / (rect.height / 2);
+      const tiltX = (-y * 8).toFixed(2);
+      const tiltY = ( x * 10).toFixed(2);
+
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        frame.style.transform = `perspective(900px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.01)`;
+        media.style.transform = `translate3d(${(x*6).toFixed(2)}px, ${(y*6).toFixed(2)}px, 0)`;
+      });
+    }
+    function onLeave(){
+      frame.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)';
+      media.style.transform = 'translate3d(0,0,0)';
+    }
+
+    const finePointer = window.matchMedia('(pointer: fine)').matches;
+    if (finePointer) {
+      frame.addEventListener('mousemove', onMove);
+      frame.addEventListener('mouseleave', onLeave);
+    } else {
+      // Mobile gentle sway
+      let t = 0;
+      const sway = () => {
+        t += 0.016;
+        const rx = Math.sin(t) * 2.2;
+        const ry = Math.cos(t * 0.9) * 2.6;
+        frame.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.01)`;
+        requestAnimationFrame(sway);
+      };
+      requestAnimationFrame(sway);
+    }
+
+    // Active nav highlight
+    const sections = document.querySelectorAll("section[id]");
+    const links = document.querySelectorAll(".navLink[data-section]");
+
+    const io = new IntersectionObserver((entries) => {
+      // Choose the most visible section
+      let best = null;
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          if (!best || e.intersectionRatio > best.intersectionRatio) best = e;
+        }
+      }
+      if (!best) return;
+      const id = best.target.id;
+
+      links.forEach(a => a.classList.toggle("active", a.dataset.section === id));
+    }, { root:null, threshold:[0.15,0.25,0.35,0.5,0.65] });
+
+    sections.forEach(s => io.observe(s));
+
+    // Demo form
+    const form = document.getElementById("contactForm");
+    const status = document.getElementById("formStatus");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      emailjs.send("service_ykp5gdd", "template_mc8uhdi", {
+        name: this.name.value.trim(),
+        email: this.email.value.trim(),
+        message: this.message.value.trim(),
+        time: new Date().toLocaleString()
+      })
+        .then(function() {
+          status.textContent = "✅ OK!";
+          form.reset();
+        }, function(error) {
+          status.textContent = "❌ NOT OK!";
+          console.log(error);
+        });
+    });
+  })();
+</script>
+
+</body>
+</html>
